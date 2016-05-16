@@ -1,0 +1,4 @@
+<launch>
+    <node pkg="cse_190_assi_3" type="robot.py" name="robot" output="screen" required="true"/> 
+    <node pkg="cse_190_assi_3" type="data_transcriber.py" name="data_transcriber" output="screen" cwd="node"/> 
+</launch>

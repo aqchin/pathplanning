@@ -16,7 +16,7 @@ class Robot():
         )
 
         AStar()
-        # MDP goes here
+        MDP()
 
         self.sim_pub.publish(True)
         rospy.sleep(1)

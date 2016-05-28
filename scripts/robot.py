@@ -38,6 +38,10 @@ class Robot():
         pl = PolicyList()
         pl.data = markov.policy_list
         rospy.sleep(1)
+
+
+        rospy.sleep(1)
+        rospy.sleep(1)
         self.policy_pub.publish(pl)
         #print markov.policy_list
         #for m in markov.policy_list:
@@ -49,6 +53,10 @@ class Robot():
         self.sim_pub.publish(True)
         rospy.sleep(1)
         rospy.signal_shutdown("Done.")
+
+
+
+
 
 if __name__ == '__main__':
     try:

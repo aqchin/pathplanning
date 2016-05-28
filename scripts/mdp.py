@@ -3,7 +3,7 @@
 from read_config import read_config
 from operator import add
 from collections import defaultdict
-from Robot import publish_policy
+
 class mdp:
 
 
@@ -46,9 +46,9 @@ class mdp:
                 if list(k) not in self.pits and list(k) not in self.walls and k != tuple(self.goal):
 
                     self.cur_val[tuple(k)] = self.tmp_val[tuple(k)]
+            
+        self.find_policy()
 
-            self.find_policy()
-            publish_policy(self.policy_list)
 
 
     def find_policy(self):

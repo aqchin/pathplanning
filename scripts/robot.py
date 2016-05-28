@@ -34,12 +34,17 @@ class Robot():
             rospy.sleep(1)
             self.path_pub.publish(asp)
 
-        _mdp = mdp()
-        for m in _mdp.policy_list:
-            pl = PolicyList()
-            pl.data = m
-            rospy.sleep(1)
-            self.policy_pub.publish(pl)
+        markov = mdp()
+        pl = PolicyList()
+        pl.data = markov.policy_list
+        rospy.sleep(1)
+        self.policy_pub.publish(pl)
+        #print markov.policy_list
+        #for m in markov.policy_list:
+            #pl = PolicyList()
+            #pl.data = m
+            #rospy.sleep(1)
+            #self.policy_pub.publish(pl)
 
         self.sim_pub.publish(True)
         rospy.sleep(1)

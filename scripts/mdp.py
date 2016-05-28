@@ -39,13 +39,13 @@ class mdp:
                 print self.cur_val[(r,c)]
         print "end initial cur val"
         for i in range(self.config["max_iterations"]):
-  #      for i in range(1):  
+  #      for i in range(1):
             for r in range(self.map_size[0]):
                 for c in range(self.map_size[1]):
                     if (r,c) not in self.pits and (r,c) not in self.walls and (r,c) != tuple(self.goal):
                         self.hululu(r,c)
 
-         
+
             for k in self.cur_val.keys():
                 if list(k) not in self.pits and list(k) not in self.walls and k != tuple(self.goal):
 
@@ -55,20 +55,22 @@ class mdp:
                 for c in range(self.map_size[1]):
                     if i ==0:
                         print self.cur_val[(r,c)]
+        self.policy_list = list()
+        self.find_policy()
         print "WHAT THE FUCK?"
         for r in range(self.map_size[0]):
 
             for c in range(self.map_size[1]):
-                print self.cur_val[tuple([r,c])]  
+                print self.cur_val[tuple([r,c])]
             print "\n"
-        
-        self.policy_list = list()
-        self.find_policy()
+
+        #self.policy_list = list()
+        #self.find_policy()
         print "PRINT POLICY"
         print self.policy_list
-    
+
     def find_policy(self):
-        
+
         for r in range(self.map_size[0]):
             for c in range(self.map_size[1]):
                 if (r,c) == tuple(self.goal):
@@ -109,7 +111,7 @@ class mdp:
                         tmp_max += self.prob_left*self.cur_val[tuple(pos_l)]
                         tmp_max += self.prob_right*self.cur_val[tuple(pos_r)]
                         if r == 1 and c == 2:
-                            print tmp_max 
+                            print tmp_max
                         if tmp_max > max_prob:
                             max_prob = tmp_max
                             direction = directio
@@ -117,15 +119,15 @@ class mdp:
                             max_prob = 999999
                             direction = directio
                     self.policy_list.append(direction)
-                
-            
+
+
     def hululu(self, r, c):
 
         cur_pos = [r,c]
         cur_best = -10000000
         for i in self.move_list:
             move_sum = 0
-            for pr in self.move_list: 
+            for pr in self.move_list:
 
                 tmp_pos = map(add, cur_pos, pr)
  #               if r == 0 and c == 2:
@@ -161,14 +163,14 @@ class mdp:
                 else:
                     new_val = prob * (self.step + self.discount * self.cur_val[tuple(tmp_pos)])
                 move_sum += new_val
-        
+
             if move_sum > cur_best:
                 cur_best = move_sum
 
         self.tmp_val[tuple(cur_pos)] = cur_best
 
-            
-                                    
+
+
 
     def eql(self, a, b):
         if sum(i != j for i, j in zip(a, b)) > 0:

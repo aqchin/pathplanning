@@ -3,7 +3,7 @@
 from read_config import read_config
 from operator import add
 from collections import defaultdict
-
+from Robot import publish_policy
 class mdp:
 
 
@@ -25,19 +25,15 @@ class mdp:
         self.prob_backward = self.config["prob_move_backward"]
         self.prob_left = self.config["prob_move_left"]
         self.prob_right = self.config["prob_move_right"]
-
+        self.policy_list = list()
 
         current_pos = self.start
         self.cur_val = defaultdict(lambda: 0)
         self.cur_val[tuple(self.goal)] = self.reaching_goal
         for i in self.pits:
-            print "PIT"
             self.cur_val[tuple(i)] = self.falling_pit
         self.tmp_val = defaultdict(lambda: 0)
-        for r in range(self.map_size[0]):
-            for c in range(self.map_size[1]):
-                print self.cur_val[(r,c)]
-        print "end initial cur val"
+
         for i in range(self.config["max_iterations"]):
   #      for i in range(1):
             for r in range(self.map_size[0]):
@@ -51,23 +47,9 @@ class mdp:
 
                     self.cur_val[tuple(k)] = self.tmp_val[tuple(k)]
 
-            for r in range(self.map_size[0]):
-                for c in range(self.map_size[1]):
-                    if i ==0:
-                        print self.cur_val[(r,c)]
-        self.policy_list = list()
-        self.find_policy()
-        print "WHAT THE FUCK?"
-        for r in range(self.map_size[0]):
+            self.find_policy()
+            publish_policy(self.policy_list)
 
-            for c in range(self.map_size[1]):
-                print self.cur_val[tuple([r,c])]
-            print "\n"
-
-        #self.policy_list = list()
-        #self.find_policy()
-        print "PRINT POLICY"
-        print self.policy_list
 
     def find_policy(self):
 
@@ -102,16 +84,14 @@ class mdp:
                         else:
                             pos_l = [r - i[1], c]
                             pos_r = [r + i[1], c]
-                        if r == 1 and c == 2:
-                            print i
-                            print directio
-                            print pos_f, pos_b, pos_l, pos_r
+
+
                         tmp_max = self.prob_forward*self.cur_val[tuple(pos_f)]
                         tmp_max += self.prob_backward*self.cur_val[tuple(pos_b)]
                         tmp_max += self.prob_left*self.cur_val[tuple(pos_l)]
                         tmp_max += self.prob_right*self.cur_val[tuple(pos_r)]
-                        if r == 1 and c == 2:
-                            print tmp_max
+
+
                         if tmp_max > max_prob:
                             max_prob = tmp_max
                             direction = directio

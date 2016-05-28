@@ -1,24 +1,30 @@
 #!/usr/bin/env python
 
 #robot.py implementation goes here
-import astar, mdp
+import astar
+from mdp import mdp
 import rospy
 from std_msgs.msg import Bool
-from cse_190_assi_3.msg import AStarPath
+from cse_190_assi_3.msg import AStarPath, PolicyList
 
 class Robot():
     def __init__(self):
         rospy.init_node('Robot', anonymous=True)
 
-        self.pl_pub = rospy.Publisher(
+        self.path_pub = rospy.Publisher(
             "results/path_list",
             AStarPath,
+            queue_size = 10
+        )
+        self.policy_pub = rospy.Publisher(
+            "results/policy_list",
+            PolicyList,
             queue_size = 10
         )
         self.sim_pub = rospy.Publisher(
             "map_node/sim_complete",
             Bool,
-            queue_size = 15
+            queue_size = 10
         )
 
         path_list = astar.astar()
@@ -26,9 +32,14 @@ class Robot():
             asp = AStarPath()
             asp.data = pl
             rospy.sleep(1)
-            self.pl_pub.publish(asp)
+            self.path_pub.publish(asp)
 
-        mdp.mdp()
+        _mdp = mdp()
+        for m in _mdp.policy_list:
+            pl = PolicyList()
+            pl.data = m
+            rospy.sleep(1)
+            self.policy_pub.publish(pl)
 
         self.sim_pub.publish(True)
         rospy.sleep(1)
